@@ -7,40 +7,40 @@
     <style>
         body {
             font-family: Arial, Helvetica, sans-serif;
-            background-color: #f7f9fa;
-            color: #333;
+            background-color: #f8fafc;
+            color: #1e293b;
             line-height: 1.6;
             margin: 0;
             padding: 30px 15px;
         }
 
         .container {
-            max-width: 760px;
+            max-width: 800px;
             margin: 0 auto;
             background: #ffffff;
-            padding: 30px;
+            padding: 32px;
             border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
         }
 
         h1 {
             color: #1e3a8a;
-            border-bottom: 2px solid #e5e7eb;
+            border-bottom: 2px solid #e2e8f0;
             padding-bottom: 12px;
             margin-top: 0;
             font-size: 24px;
         }
 
         h2 {
-            color: #1f2937;
+            color: #334155;
             margin-top: 28px;
             font-size: 19px;
-            border-bottom: 1px solid #e5e7eb;
+            border-bottom: 1px solid #e2e8f0;
             padding-bottom: 6px;
         }
 
         h3 {
-            color: #374151;
+            color: #475569;
             font-size: 16px;
             margin-bottom: 6px;
         }
@@ -60,17 +60,17 @@
         }
 
         code {
-            background-color: #f3f4f6;
+            background-color: #f1f5f9;
             color: #b91c1c;
             padding: 2px 6px;
             border-radius: 4px;
-            font-size: 14px;
+            font-size: 13px;
             font-family: Consolas, monospace;
         }
 
-        .method {
+        .badge {
             display: inline-block;
-            padding: 2px 6px;
+            padding: 2px 7px;
             border-radius: 4px;
             font-size: 12px;
             font-weight: bold;
@@ -80,9 +80,35 @@
         .post { background-color: #d97706; }
         .get { background-color: #059669; }
 
-        .img-box {
+        /* Estilos de tabla comparativa */
+        .hash-table {
+            width: 100%;
+            border-collapse: collapse;
             margin: 16px 0;
-            border: 1px solid #e5e7eb;
+            font-size: 14px;
+        }
+
+        .hash-table th, .hash-table td {
+            border: 1px solid #e2e8f0;
+            padding: 10px 12px;
+            text-align: left;
+        }
+
+        .hash-table th {
+            background-color: #f1f5f9;
+            color: #1e293b;
+        }
+
+        .hash-code {
+            font-family: Consolas, monospace;
+            font-size: 12px;
+            word-break: break-all;
+            color: #0369a1;
+        }
+
+        .img-box {
+            margin: 16px 0 24px;
+            border: 1px solid #e2e8f0;
             border-radius: 6px;
             overflow: hidden;
             background: #fafafa;
@@ -90,7 +116,7 @@
 
         .img-box img {
             display: block;
-            max-width: 100%;
+            width: 100%;
             height: auto;
         }
     </style>
@@ -99,49 +125,76 @@
 
 <div class="container">
     <h1>PFO 2: Sistema de Gestión de Tareas con API y Base de Datos</h1>
-    <p><strong>Materia:</strong> Programación sobre Redes</p>
+    <p><strong>Materia:</strong> Programación sobre Redes | API REST + SQLite + Autenticación Segura</p>
 
     <h2>1. Endpoints de la API Flask</h2>
     <ul>
-        <li><span class="method post">POST</span> <code>/registro</code>: Recibe <code>{"usuario": "...", "contraseña": "..."}</code>, genera el hash seguro y persiste el usuario en SQLite.</li>
-        <li><span class="method post">POST</span> <code>/login</code>: Compara las credenciales ingresadas contra el hash en la base de datos para habilitar el acceso.</li>
-        <li><span class="method get">GET</span> <code>/tareas</code>: Retorna la vista HTML de confirmación de servidor operativo.</li>
+        <li><span class="badge post">POST</span> <code>/registro</code>: Recibe credenciales en formato JSON, aplica hashing criptográfico y persiste el registro en SQLite.</li>
+        <li><span class="badge post">POST</span> <code>/login</code>: Valida las credenciales enviadas comparándolas de forma segura con el hash persistido.</li>
+        <li><span class="badge get">GET</span> <code>/tareas</code>: Retorna la vista HTML de confirmación de operatividad del sistema.</li>
     </ul>
 
     <h2>2. Respuestas Conceptuales</h2>
     
     <h3>¿Por qué hashear contraseñas?</h3>
     <p>
-        Para evitar guardar texto plano en la base de datos. Un hash criptográfico es unidireccional (irreversible). Si la base de datos se filtra, los atacantes no obtienen las contraseñas reales. Además, el uso de <em>salt</em> asegura que dos contraseñas idénticas generen hashes distintos, anulando ataques con tablas precalculadas (Rainbow Tables).
+        Para garantizar la <strong>irreversibilidad</strong>. Un algoritmo criptográfico de hash convierte la clave en una cadena alfanumérica fija que no se puede desencriptar matemáticamente. Si la base de datos se viera comprometida, el atacante no obtiene las contraseñas reales. Además, al aplicar <em>salt</em> aleatorio, contraseñas idénticas producen hashes distintos, anulando ataques con tablas precalculadas (Rainbow Tables).
     </p>
 
     <h3>Ventajas de usar SQLite en este proyecto</h3>
     <ul>
-        <li><strong>Serverless (sin servidor):</strong> No requiere instalar ni configurar motores externos como MySQL o PostgreSQL.</li>
-        <li><strong>Portabilidad:</strong> Todo el esquema y registros residen en el archivo local <code>tareas.db</code>, facilitando respaldos y clonación del repositorio.</li>
-        <li><strong>Librería estándar:</strong> Python incluye el módulo <code>sqlite3</code> de fábrica sin dependencias extras.</li>
+        <li><strong>Serverless (Sin servidor):</strong> No requiere instalar ni administrar demonios de bases de datos independientes (como MySQL o PostgreSQL).</li>
+        <li><strong>Portabilidad:</strong> Todo el esquema relacional y sus registros residen en el archivo local <code>tareas.db</code>.</li>
+        <li><strong>Nativo:</strong> Se utiliza mediante el módulo <code>sqlite3</code> integrado en la biblioteca estándar de Python.</li>
     </ul>
 
-    <h2>3. Guía de Ejecución Local</h2>
-    <ol>
-        <li>Instalar paquetes: <code>pip install Flask requests</code></li>
-        <li>Iniciar el backend: <code>python servidor.py</code></li>
-        <li>En otra terminal, correr el cliente: <code>python cliente.py</code></li>
-    </ol>
+    <h2>3. Mecanismo y Evidencia de Hasheo en SQLite</h2>
+    <p>
+        La aplicación implementa <code>werkzeug.security.generate_password_hash</code>, aplicando un esquema con <em>salt</em> dinámico. En la base de datos nunca se almacena la contraseña original:
+    </p>
 
-    <h2>4. Capturas de Pruebas</h2>
-    <p>Verificación de endpoints y funcionamiento de la base de datos:</p>
-    
+    <table class="hash-table">
+        <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Entrada (Texto Plano)</th>
+                <th>Persistencia Real en SQLite (Hash)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>enzo</strong></td>
+                <td><code>1234</code></td>
+                <td class="hash-code">scrypt:32768:8:1$pbCUCcTLUXdjnYGE$82c93589dcbdedc9d49feb4308ee5460e368050f32d40951b3f9d9bfaad329d8a4bff414d50bcbb86f1db4c74f7f64608e3729d23dc53c8ca68d6f415415bb32</td>
+            </tr>
+            <tr>
+                <td><strong>usuario_prueba</strong></td>
+                <td><code>claveSegura2026</code></td>
+                <td class="hash-code">scrypt:32768:8:1$6h3LemiZBlQ1E3nS$6001a37341625e44278fea2ee7bdc14cd8be7c4bf9560dc3771be6f8414f3effa9be4770ae5e67cf4225833baa60a67d9a5e7cf29b187bea48cbb414ea2f22f0</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p><strong>Inspección visual del archivo <code>tareas.db</code>:</strong></p>
     <div class="img-box">
-        <img src="captura_registro.png" alt="Captura POST /registro exitoso">
+        <img src="capturas/hasheo_bd.png" alt="Captura de contraseñas hasheadas en SQLite">
     </div>
+
+    <h2>4. Evidencias de Ejecución</h2>
     
+    <p><strong>1. Prueba de Registro (POST /registro):</strong></p>
     <div class="img-box">
-        <img src="captura_login.png" alt="Captura POST /login exitoso">
+        <img src="capturas/registro.png" alt="Captura de Registro exitoso">
     </div>
-    
+
+    <p><strong>2. Prueba de Inicio de Sesión (POST /login):</strong></p>
     <div class="img-box">
-        <img src="captura_tareas.png" alt="Captura GET /tareas en navegador">
+        <img src="capturas/login.png" alt="Captura de Login exitoso">
+    </div>
+
+    <p><strong>3. Consulta Web (GET /tareas):</strong></p>
+    <div class="img-box">
+        <img src="capturas/tareas.png" alt="Captura de vista web /tareas">
     </div>
 </div>
 
