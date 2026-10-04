@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PFO 2 - Sistema de Gestión de Tareas</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f7f9fa;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 30px 15px;
+        }
+
+        .container {
+            max-width: 760px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            color: #1e3a8a;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 12px;
+            margin-top: 0;
+            font-size: 24px;
+        }
+
+        h2 {
+            color: #1f2937;
+            margin-top: 28px;
+            font-size: 19px;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 6px;
+        }
+
+        h3 {
+            color: #374151;
+            font-size: 16px;
+            margin-bottom: 6px;
+        }
+
+        p, li {
+            font-size: 15px;
+            color: #4b5563;
+        }
+
+        ul, ol {
+            padding-left: 22px;
+            margin-top: 6px;
+        }
+
+        li {
+            margin-bottom: 6px;
+        }
+
+        code {
+            background-color: #f3f4f6;
+            color: #b91c1c;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: Consolas, monospace;
+        }
+
+        .method {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .post { background-color: #d97706; }
+        .get { background-color: #059669; }
+
+        .img-box {
+            margin: 16px 0;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            overflow: hidden;
+            background: #fafafa;
+        }
+
+        .img-box img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>PFO 2: Sistema de Gestión de Tareas con API y Base de Datos</h1>
+    <p><strong>Materia:</strong> Programación sobre Redes</p>
+
+    <h2>1. Endpoints de la API Flask</h2>
+    <ul>
+        <li><span class="method post">POST</span> <code>/registro</code>: Recibe <code>{"usuario": "...", "contraseña": "..."}</code>, genera el hash seguro y persiste el usuario en SQLite.</li>
+        <li><span class="method post">POST</span> <code>/login</code>: Compara las credenciales ingresadas contra el hash en la base de datos para habilitar el acceso.</li>
+        <li><span class="method get">GET</span> <code>/tareas</code>: Retorna la vista HTML de confirmación de servidor operativo.</li>
+    </ul>
+
+    <h2>2. Respuestas Conceptuales</h2>
+    
+    <h3>¿Por qué hashear contraseñas?</h3>
+    <p>
+        Para evitar guardar texto plano en la base de datos. Un hash criptográfico es unidireccional (irreversible). Si la base de datos se filtra, los atacantes no obtienen las contraseñas reales. Además, el uso de <em>salt</em> asegura que dos contraseñas idénticas generen hashes distintos, anulando ataques con tablas precalculadas (Rainbow Tables).
+    </p>
+
+    <h3>Ventajas de usar SQLite en este proyecto</h3>
+    <ul>
+        <li><strong>Serverless (sin servidor):</strong> No requiere instalar ni configurar motores externos como MySQL o PostgreSQL.</li>
+        <li><strong>Portabilidad:</strong> Todo el esquema y registros residen en el archivo local <code>tareas.db</code>, facilitando respaldos y clonación del repositorio.</li>
+        <li><strong>Librería estándar:</strong> Python incluye el módulo <code>sqlite3</code> de fábrica sin dependencias extras.</li>
+    </ul>
+
+    <h2>3. Guía de Ejecución Local</h2>
+    <ol>
+        <li>Instalar paquetes: <code>pip install Flask requests</code></li>
+        <li>Iniciar el backend: <code>python servidor.py</code></li>
+        <li>En otra terminal, correr el cliente: <code>python cliente.py</code></li>
+    </ol>
+
+    <h2>4. Capturas de Pruebas</h2>
+    <p>Verificación de endpoints y funcionamiento de la base de datos:</p>
+    
+    <div class="img-box">
+        <img src="captura_registro.png" alt="Captura POST /registro exitoso">
+    </div>
+    
+    <div class="img-box">
+        <img src="captura_login.png" alt="Captura POST /login exitoso">
+    </div>
+    
+    <div class="img-box">
+        <img src="captura_tareas.png" alt="Captura GET /tareas en navegador">
+    </div>
+</div>
+
+</body>
+</html>
